@@ -76,7 +76,7 @@ export default function Login() {
           if (isUserAdmin()) {
             navigate('/adminpanel');
           } else {
-            navigate('/quizzes');
+            navigate('/main');
           }
         }
       } catch (error) {

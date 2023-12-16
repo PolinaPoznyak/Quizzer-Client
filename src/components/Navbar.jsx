@@ -37,7 +37,7 @@ export const Navbar = () => {
 
   return (
     <nav>
-      <Link className="title">
+      <Link  to="/main" className="title">
         Quizzer
       </Link>
       <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
