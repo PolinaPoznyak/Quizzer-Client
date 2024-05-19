@@ -1,0 +1,13 @@
+.table-title {
+    width: 20%;
+  }
+  
+  .table-description {
+    width: 50%;
+    text-align: center;
+  }
+  
+  .table-actions {
+    width: 30%;
+    text-align: left;
+  }

@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import apiService from '../services/apiService';
+import '../css/UserQuizzes.css';
 
 const buttonStyle = {
   width: '150px',
@@ -88,6 +89,12 @@ const UserQuizzes = () => {
     setDeleteConfirmationOpen(false);
   };
 
+  const startMultiplayer = (quizId) => {
+    // Implement the logic to start a multiplayer game
+    console.log(`Starting multiplayer for quiz with id: ${quizId}`);
+    // Redirect or perform any other necessary actions to start the multiplayer game
+  };
+
   return (
     <div>
       <Navbar />
@@ -103,23 +110,28 @@ const UserQuizzes = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell className="table-title-header">Title</TableCell>
+              <TableCell className="table-description-header">Description</TableCell>
+              <TableCell className="table-actions-header">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {quizzes.map((quiz) => (
               <TableRow key={quiz.id}>
-                <TableCell>{quiz.title}</TableCell>
-                <TableCell>{quiz.description}</TableCell>
-                <TableCell>
+                <TableCell className="table-title">{quiz.title}</TableCell>
+                <TableCell className="table-description">{quiz.description}</TableCell>
+                <TableCell className="table-actions">
                   <Button component={Link} to={`/editquiz/${quiz.id}`} variant="outlined" style={buttonEditStyle}>
                     Edit
                   </Button>
                   <Button onClick={() => handleDeleteConfirmationOpen(quiz)} variant="outlined" style={buttonEditStyle}>
                     Delete
                   </Button>
+                  {quiz.isMultiplayer && (
+                    <Button onClick={() => startMultiplayer(quiz.id)} variant="contained" style={buttonEditStyle}>
+                      Start Multiplayer
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -136,8 +148,8 @@ const UserQuizzes = () => {
           Back to Profile
         </Button>
       </Link>
-{/* Delete Confirmation Dialog */}
-<Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteConfirmationOpen} onClose={handleDeleteConfirmationClose}>
         <DialogTitle>Delete Quiz</DialogTitle>
         <DialogContent>
           <Typography>
