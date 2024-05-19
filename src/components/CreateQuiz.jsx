@@ -10,6 +10,8 @@ import {
   Select,
   MenuItem,
   Snackbar,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import apiService from '../services/apiService';
@@ -35,6 +37,7 @@ const CreateQuiz = () => {
   const [quizDetails, setQuizDetails] = useState({
     title: '',
     description: '',
+    isMultiplayer: false,
   });
 
   const [questions, setQuestions] = useState([]);
@@ -47,6 +50,13 @@ const CreateQuiz = () => {
     setQuizDetails({
       ...quizDetails,
       [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleIsMultiplayerToggle = (event) => {
+    setQuizDetails({
+      ...quizDetails,
+      isMultiplayer: event.target.checked,
     });
   };
 
@@ -121,6 +131,7 @@ const CreateQuiz = () => {
         createdQuizResponse = await apiService.createQuiz({
           title: quizDetails.title,
           description: quizDetails.description,
+          isMultiplayer: quizDetails.isMultiplayer,
         });
 
         if (createdQuizResponse && createdQuizResponse.id) {
@@ -203,6 +214,18 @@ const CreateQuiz = () => {
         onChange={handleQuizDetailsChange}
         style={textFieldStyle}
         margin="normal"
+      />
+      <br />
+      <FormControlLabel
+        control={
+          <Switch
+            checked={quizDetails.isMultiplayer}
+            onChange={handleIsMultiplayerToggle}
+            name="isMultiplayer"
+            color="primary"
+          />
+        }
+        label="Is Multiplayer"
       />
       <hr style={{ margin: '20px 0' }} />
       <h3>2. Add questions and answers on them</h3>
