@@ -11,6 +11,7 @@ import PlayQuiz from './components/PlayQuiz';
 import UserQuizzes from './components/UserQuizzes';
 import CreateQuiz from './components/CreateQuiz';
 import EditQuiz from './components/EditQuiz';
+import QuizLobby from './components/QuizLobby';
 import AdminPanel from './components/adminpanel/AdminPanel';
 import QuizTable from './components/adminpanel/QuizTable';
 import QuestionTable from './components/adminpanel/QuestionTable';
@@ -38,6 +39,7 @@ function App() {
         <Route path="/questiontable" element={<QuestionTable />} />
         <Route path="/answertable" element={<AnswerTable />} />
         <Route path="/usertable" element={<UserTable />} />
+        <Route path="/quiz-lobby" element={<QuizLobby />} />
       </Routes>
     </div>
   );

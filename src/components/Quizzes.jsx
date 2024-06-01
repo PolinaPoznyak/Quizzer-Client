@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Button, Box, Dialog, DialogActions, Dial
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import apiService from '../services/apiService';
+import ConnectQuiz from './ConnectQuiz';
 
 const QuizList = () => {
   const [data, setData] = useState(null);
@@ -48,6 +49,8 @@ const QuizList = () => {
   return (
     <div>
       <Navbar />
+      <br/>
+      <ConnectQuiz />
       <Box
         sx={{
           display: 'flex',
@@ -102,6 +105,31 @@ const QuizList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* <Dialog open={onOpenQuizConnectDialog} onClose={onCancelQuizConnectDialog}>
+      <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please input quiz code
+          </DialogContentText>
+          <NumberInput
+            autoFocus
+            required
+            margin="dense"
+            id="quizCode"
+            name="quizCode"
+            label="Quiz Code"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+        <Button onClick={onCancelQuizConnectDialog} color="primary">
+            Cancel
+        </Button>
+        <Button onClick={handleConfirmConnectQuiz} color="primary" autoFocus>
+          Connect Quiz
+        </Button>
+        </DialogActions>
+      </Dialog> */}
     </div>
   );
 };

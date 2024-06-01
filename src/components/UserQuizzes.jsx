@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import {
   Button,
@@ -34,10 +34,12 @@ const buttonEditStyle = {
 const UserQuizzes = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [quizToDelete, setQuizToDelete] = useState(null);
   const userId = localStorage.getItem('authUserId');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -89,10 +91,22 @@ const UserQuizzes = () => {
     setDeleteConfirmationOpen(false);
   };
 
-  const startMultiplayer = (quizId) => {
-    // Implement the logic to start a multiplayer game
-    console.log(`Starting multiplayer for quiz with id: ${quizId}`);
-    // Redirect or perform any other necessary actions to start the multiplayer game
+  const startMultiplayer = async (quizId) => {
+    try {
+      const response = await apiService.createQuizSessionMultyplayer(quizId);
+      var quizCode = response.quizCode;
+      var quizSessionId = response.id;
+      localStorage.setItem('quizSessionCode', quizCode);
+      localStorage.setItem('quizSessionId', quizSessionId);
+      setSuccessMessage('Connected to quiz successfully!');
+      setErrorMessage('');
+      setOpenSnackbar(true);
+      navigate(`/quiz-lobby?quizSessionId=${quizSessionId}&quizCode=${quizCode}&userId=${userId}`);
+    } catch (error) {
+      setErrorMessage('Failed to connect to quiz.');
+      setSuccessMessage('');
+      setOpenSnackbar(true);
+    }
   };
 
   return (
@@ -101,8 +115,8 @@ const UserQuizzes = () => {
       <h2>My Quizzes</h2>
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-          {successMessage}
+        <MuiAlert onClose={handleSnackbarClose} severity={successMessage ? 'success' : 'error'} sx={{ width: '100%' }}>
+          {successMessage || errorMessage}
         </MuiAlert>
       </Snackbar>
 

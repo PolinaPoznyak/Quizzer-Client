@@ -359,6 +359,81 @@ const apiService = {
       throw error;
     }
   },
+
+  createQuizSessionMultyplayer: async (quizId) => {
+    const token = localStorage.getItem('token');
+  
+    try {
+      const authenticatedUserId = localStorage.getItem("authUserId");
+
+      const response = await axios.post(
+        `${API_BASE_URL}/QuizSession`,
+        {
+          quizId: quizId,
+          startDate: null,
+          quizSessionResults: [
+            {
+              quizSessionId: authenticatedUserId,
+              score: -1,
+            },
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      return response.data;
+    } catch (error) {
+      console.error('Error creating QuizSession:', error);
+      throw error;
+    }
+  },
+
+  createQuizSessionResultByQuizCode: async (quizCode) => {
+    const token = localStorage.getItem('token');
+  
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/QuizSessionResult/multiplayer-quiz?quizCode=${quizCode}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      return response.data;
+    } catch (error) {
+      console.error('Error creating QuizSessionResult:', error);
+      throw error;
+    }
+  },
+  
+  getQuizSessionParticipants: async (quizSessionId) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/QuizSession/quiz/${quizSessionId}/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching quiz session participants:', error);
+      throw error;
+    }
+  }
 };
 
 export default apiService;
