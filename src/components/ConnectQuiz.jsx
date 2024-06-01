@@ -37,9 +37,9 @@ const ConnectQuiz = () => {
   const handleConfirmConnectQuiz = async () => {
     try {
       const response = await apiService.createQuizSessionResultByQuizCode(quizCode);
-      // var quizSessionResultId = response.id;
+      var quizSessionResultId = response.id;
       var quizSessionId = response.quizSessionId;
-      // localStorage.setItem('quizSessionResultId', quizSessionResultId);
+      localStorage.setItem('quizSessionResultId', quizSessionResultId);
       localStorage.setItem('quizSessionId', quizSessionId);
       setSuccessMessage('Connected to quiz successfully!');
       setErrorMessage('');

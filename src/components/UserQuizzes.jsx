@@ -96,12 +96,14 @@ const UserQuizzes = () => {
       const response = await apiService.createQuizSessionMultyplayer(quizId);
       var quizCode = response.quizCode;
       var quizSessionId = response.id;
+      var quizOwner = true;
       localStorage.setItem('quizSessionCode', quizCode);
       localStorage.setItem('quizSessionId', quizSessionId);
+      localStorage.setItem('quizOwner', quizOwner);
       setSuccessMessage('Connected to quiz successfully!');
       setErrorMessage('');
       setOpenSnackbar(true);
-      navigate(`/quiz-lobby?quizSessionId=${quizSessionId}&quizCode=${quizCode}&userId=${userId}`);
+      navigate(`/quiz-lobby?quizSessionId=${quizSessionId}&quizCode=${quizCode}&userId=${userId}&quizOwner=${quizOwner}`);
     } catch (error) {
       setErrorMessage('Failed to connect to quiz.');
       setSuccessMessage('');

@@ -8,6 +8,7 @@ import Dashboard from './components/Dashboard';
 import Profile from './components/Profile';
 import Quizzes from './components/Quizzes';
 import PlayQuiz from './components/PlayQuiz';
+import PlayMultiplayer from './components/PlayMultiplayer';
 import UserQuizzes from './components/UserQuizzes';
 import CreateQuiz from './components/CreateQuiz';
 import EditQuiz from './components/EditQuiz';
@@ -31,6 +32,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quiz/:id" element={<PlayQuiz />} />
+        <Route path="/quiz/:id" element={<PlayMultiplayer />} />
         <Route path="/userquizzes" element={<UserQuizzes />} />
         <Route path="/addquiz" element={<CreateQuiz />} />
         <Route path="/editquiz/:quizId" element={<EditQuiz />} />

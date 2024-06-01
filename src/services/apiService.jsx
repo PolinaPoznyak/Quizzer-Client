@@ -23,7 +23,7 @@ const apiService = {
       throw error;
     }
   },
-  
+
   updateQuiz: async (quizId, updatedQuizData) => {
     try {
       const response = await axios.put(`${API_BASE_URL}/quiz`, updatedQuizData);
@@ -433,7 +433,17 @@ const apiService = {
       console.error('Error fetching quiz session participants:', error);
       throw error;
     }
-  }
+  },
+
+  getQuizSessionByCode: async (quizCode) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/QuizSession/byCode/${quizCode}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching QuizSession by code', error);
+      throw error;
+    }
+  }, 
 };
 
 export default apiService;
