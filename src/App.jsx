@@ -32,7 +32,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quiz/:id" element={<PlayQuiz />} />
-        <Route path="/quiz/:id" element={<PlayMultiplayer />} />
+        <Route path="/multiplayer/:id" element={<PlayMultiplayer />} />
         <Route path="/userquizzes" element={<UserQuizzes />} />
         <Route path="/addquiz" element={<CreateQuiz />} />
         <Route path="/editquiz/:quizId" element={<EditQuiz />} />

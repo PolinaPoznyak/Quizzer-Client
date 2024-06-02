@@ -129,6 +129,16 @@ const apiService = {
     }
   },
 
+  getQuizAnswerInfo: async (answerId) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/QuizAnswer/${answerId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching answer info:', error);
+      throw error;
+    }
+  },
+
   updateQuizAnswer: async (answerData) => {
     try {
       const response = await axios.put(`${API_BASE_URL}/quizanswer`, answerData);
