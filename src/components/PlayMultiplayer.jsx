@@ -28,6 +28,7 @@ const PlayMultiplayer = () => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15);
+  const [timeLeftProgressBar, setTimeLeftProgressBar] = useState(15);
   const [isAnswered, setIsAnswered] = useState(false);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
 
@@ -77,6 +78,18 @@ const PlayMultiplayer = () => {
     }
   }, [timeLeft, isAnswered]);
 
+  useEffect(() => {
+    if (timeLeftProgressBar > 0) {
+      const timerId = setInterval(() => {
+        setTimeLeftProgressBar((prevTime) => prevTime - 1);
+      }, 1000);
+
+      return () => clearInterval(timerId);
+    } else if (timeLeft === 0) {
+      handleTimeout();
+    }
+  }, [timeLeftProgressBar]);
+
   const fetchAnswers = async (questionId) => {
     try {
       const answersData = await apiService.getQuestionAnswers(questionId);
@@ -107,6 +120,7 @@ const PlayMultiplayer = () => {
       setShowCorrectAnswer(false);
       setIsAnswered(false);
       setTimeLeft(15);
+      setTimeLeftProgressBar(15);
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setSelectedAnswerId(null);
     }, 25000); // 15 seconds + 10 seconds
@@ -167,8 +181,8 @@ const PlayMultiplayer = () => {
   });
 
   const getProgressColor = () => {
-    if (timeLeft > 10) return 'green';
-    if (timeLeft > 5) return 'orange';
+    if (timeLeftProgressBar > 10) return 'green';
+    if (timeLeftProgressBar > 5) return 'orange';
     return 'red';
   };
 
@@ -223,11 +237,13 @@ const PlayMultiplayer = () => {
         </div>
       ) : (
         <div>
-          <StyledLinearProgress
+            {timeLeftProgressBar < 1 ? 
+            <Typography variant="h6">Prapare for next question!</Typography> : (
+            <StyledLinearProgress
             variant="determinate"
-            value={(timeLeft / 15) * 100}
-            style={{ backgroundColor: getProgressColor() }}
-          />
+            value={(timeLeftProgressBar / 15) * 100}
+            style={{ backgroundColor: getProgressColor() }}/>
+            )}
           <Typography variant="h6">{currentQuestion.text}</Typography>
           <RadioGroup
             aria-label="answers"
