@@ -22,7 +22,6 @@ const MultiplayerResults = () => {
   const { quizSessionId } = useParams();
   const [participants, setParticipants] = useState([]);
   const [loading, setLoading] = useState(true);
-  const quizCode = localStorage.getItem('quizCode');
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -32,7 +31,8 @@ const MultiplayerResults = () => {
         const results = quizSessionData.quizSessionResults;
 
         const participantsWithScores = participantsData.map(participant => {
-          const result = results.find(res => res.userId === participant.userId);
+          const result = results.find(res => res.userId === participant.id);
+          console.log('Participant:', participant, 'Result:', result);
           return { ...participant, score: result ? result.score : 0 };
         });
 
@@ -47,7 +47,6 @@ const MultiplayerResults = () => {
     fetchParticipants();
   }, [quizSessionId]);
 
-  
   const StyledPaper = styled(Paper)({
     padding: '16px',
     margin: '16px 0',
@@ -91,19 +90,21 @@ const MultiplayerResults = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {participants.map((participant, index) => (
-              <TableRow key={participant.userId}>
+            {participants
+            .filter(participant => participant.score !== -1)
+            .map((participant, index) => (
+            <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                  <Box display="flex" alignItems="center">
+                    <Box display="flex" alignItems="center">
                     <StyledAvatar alt={participant.username} src={participant.profilePicture || '/default-avatar.png'} />
                     <Typography variant="h6" style={{ marginLeft: '10px' }}>{participant.username}</Typography>
-                  </Box>
+                </Box>
                 </TableCell>
                 <TableCell>{participant.score}</TableCell>
-              </TableRow>
+            </TableRow>
             ))}
-          </TableBody>
+        </TableBody>
         </Table>
       </TableContainer>
       <Link to="/quizzes">
