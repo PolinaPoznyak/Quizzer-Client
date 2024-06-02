@@ -41,6 +41,7 @@ const ConnectQuiz = () => {
       var quizSessionId = response.quizSessionId;
       localStorage.setItem('quizSessionResultId', quizSessionResultId);
       localStorage.setItem('quizSessionId', quizSessionId);
+      localStorage.setItem('quizCode', quizCode);
       setSuccessMessage('Connected to quiz successfully!');
       setErrorMessage('');
       setOpenSnackbar(true);

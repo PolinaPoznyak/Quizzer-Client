@@ -9,6 +9,7 @@ import Profile from './components/Profile';
 import Quizzes from './components/Quizzes';
 import PlayQuiz from './components/PlayQuiz';
 import PlayMultiplayer from './components/PlayMultiplayer';
+import MultiplayerResults from './components/MultiplayerResults';
 import UserQuizzes from './components/UserQuizzes';
 import CreateQuiz from './components/CreateQuiz';
 import EditQuiz from './components/EditQuiz';
@@ -33,6 +34,7 @@ function App() {
         <Route path="/quizzes" element={<Quizzes />} />
         <Route path="/quiz/:id" element={<PlayQuiz />} />
         <Route path="/multiplayer/:id" element={<PlayMultiplayer />} />
+        <Route path="/multiplayer-results/:quizSessionId" element={<MultiplayerResults />} />
         <Route path="/userquizzes" element={<UserQuizzes />} />
         <Route path="/addquiz" element={<CreateQuiz />} />
         <Route path="/editquiz/:quizId" element={<EditQuiz />} />

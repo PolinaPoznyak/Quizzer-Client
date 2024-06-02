@@ -81,6 +81,7 @@ const QuizLobby = () => {
     try {
       const data = await apiService.getQuizSessionByCode(quizCode);
       setQuizSessionInfo(data);
+      localStorage.setItem('quizSessionId', data.id);
       setQuizId(data.quizId);
     } catch (error) {
       console.error("Failed to fetch quiz session info:", error);

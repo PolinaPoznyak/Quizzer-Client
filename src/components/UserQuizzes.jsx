@@ -97,7 +97,7 @@ const UserQuizzes = () => {
       var quizCode = response.quizCode;
       var quizSessionId = response.id;
       var quizOwner = true;
-      localStorage.setItem('quizSessionCode', quizCode);
+      localStorage.setItem('quizCode', quizCode);
       localStorage.setItem('quizSessionId', quizSessionId);
       localStorage.setItem('quizOwner', quizOwner);
       setSuccessMessage('Connected to quiz successfully!');

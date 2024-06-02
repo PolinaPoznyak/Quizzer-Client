@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -18,11 +18,13 @@ import apiService from '../services/apiService';
 
 const PlayMultiplayer = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [quiz, setQuiz] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState(null);
   const [selectedAnswerId, setSelectedAnswerId] = useState(null);
   const quizSessionResultId = localStorage.getItem('quizSessionResultId');
+  const quizSessionId = localStorage.getItem('quizSessionId');
   const [showScore, setShowScore] = useState(false);
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
@@ -160,6 +162,10 @@ const PlayMultiplayer = () => {
     setSelectedAnswerId(event.target.value);
   };
 
+  const goToTeamResults = () => {
+    navigate(`/multiplayer-results/${quizSessionId}`);
+  };
+
   const StyledPaper = styled(Paper)({
     padding: '16px',
     margin: '16px 0',
@@ -230,9 +236,7 @@ const PlayMultiplayer = () => {
                   </StyledPaper>
                 );
               })}
-            <Link to="/quizzes">
-              <StyledButton variant="contained">Return to Quizzes</StyledButton>
-            </Link>
+            <Button onClick={goToTeamResults} variant="contained">Go to team results</Button>
           </StyledPaper>
         </div>
       ) : (
