@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
+  CardMedia,
+  CardActions,
   Typography,
   Button,
   Box,
@@ -10,12 +12,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField
+  TextField,
+  Grid
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import apiService from '../services/apiService';
 import ConnectQuiz from './ConnectQuiz';
+import quizBG from '../assets/quizBG.jpg';
 
 const QuizList = () => {
   const [data, setData] = useState(null);
@@ -86,7 +90,7 @@ const QuizList = () => {
           onChange={handleSearchChange}
           style={{ marginBottom: '10px', width: '100%' }}
         />
-        <div>
+        <Grid container spacing={4} sx={{ marginTop: 1 }}>
           {data &&
             data
               .filter(
@@ -95,23 +99,26 @@ const QuizList = () => {
                   quiz.description.toLowerCase().includes(searchTerm.toLowerCase())
               )
               .map((quiz) => (
-                <Card key={quiz.id} sx={{ width: 400, marginBottom: 2 }}>
-                  <CardContent>
-                    <Typography variant="h6">{quiz.title}</Typography>
-                    <Typography variant="body2" color="textSecondary" paragraph>
-                      {quiz.description}
-                    </Typography>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleStartQuiz(quiz.id)}
-                      sx={{ marginTop: 2 }}
-                    >
-                      Start Quiz
-                    </Button>
-                  </CardContent>
-                </Card>
+                <Grid item xs={12} sm={6} key={quiz.id}>
+                  <Card sx={{ marginBottom: 2 }}>
+                    <CardMedia
+                      sx={{ height: 200 }}
+                      image={quiz.quizPicture || quizBG }
+                      title={quiz.title}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">{quiz.title}</Typography>
+                      <Typography variant="body2" color="textSecondary" paragraph>
+                        {quiz.description}
+                      </Typography>
+                      <Button variant="contained" onClick={() => handleStartQuiz(quiz.id)}>
+                        Start Quiz
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
               ))}
-        </div>
+        </Grid>
       </Box>
 
       {/* Confirmation Dialog */}

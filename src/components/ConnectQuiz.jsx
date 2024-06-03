@@ -5,7 +5,7 @@ import MuiAlert from '@mui/material/Alert';
 import apiService from '../services/apiService';
 
 const cardStyle = {
-  backgroundColor: '#9932CC',
+  backgroundColor: '#6100C1',
   padding: '20px',
 };
 
