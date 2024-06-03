@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField
+} from '@mui/material';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import apiService from '../services/apiService';
@@ -9,6 +21,7 @@ const QuizList = () => {
   const [data, setData] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedQuizId, setSelectedQuizId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -46,6 +59,10 @@ const QuizList = () => {
     setOpenDialog(false);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <div>
       <Navbar />
@@ -62,24 +79,38 @@ const QuizList = () => {
         <Typography variant="h4" gutterBottom>
           Explore Quizzes
         </Typography>
+        <TextField
+          label="Search quizzes..."
+          variant="outlined"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          style={{ marginBottom: '10px', width: '100%' }}
+        />
         <div>
-          {data && data.map((quiz) => (
-            <Card key={quiz.id} sx={{ width: 400, marginBottom: 2 }}>
-              <CardContent>
-                <Typography variant="h6">{quiz.title}</Typography>
-                <Typography variant="body2" color="textSecondary" paragraph>
-                  {quiz.description}
-                </Typography>
-                <Button
-                  variant="contained"
-                  onClick={() => handleStartQuiz(quiz.id)}
-                  sx={{ marginTop: 2 }}
-                >
-                  Start Quiz
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+          {data &&
+            data
+              .filter(
+                (quiz) =>
+                  quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  quiz.description.toLowerCase().includes(searchTerm.toLowerCase())
+              )
+              .map((quiz) => (
+                <Card key={quiz.id} sx={{ width: 400, marginBottom: 2 }}>
+                  <CardContent>
+                    <Typography variant="h6">{quiz.title}</Typography>
+                    <Typography variant="body2" color="textSecondary" paragraph>
+                      {quiz.description}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleStartQuiz(quiz.id)}
+                      sx={{ marginTop: 2 }}
+                    >
+                      Start Quiz
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
         </div>
       </Box>
 
@@ -105,31 +136,6 @@ const QuizList = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* <Dialog open={onOpenQuizConnectDialog} onClose={onCancelQuizConnectDialog}>
-      <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Please input quiz code
-          </DialogContentText>
-          <NumberInput
-            autoFocus
-            required
-            margin="dense"
-            id="quizCode"
-            name="quizCode"
-            label="Quiz Code"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-        <Button onClick={onCancelQuizConnectDialog} color="primary">
-            Cancel
-        </Button>
-        <Button onClick={handleConfirmConnectQuiz} color="primary" autoFocus>
-          Connect Quiz
-        </Button>
-        </DialogActions>
-      </Dialog> */}
     </div>
   );
 };
