@@ -16,18 +16,22 @@ import {
   DialogContent,
   DialogActions,
   Typography,
+  Avatar,
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import apiService from '../services/apiService';
 import '../css/UserQuizzes.css';
+import quizBG from '../assets/quizBG.jpg';
 
 const buttonStyle = {
   width: '150px',
+  height: '55px',
   margin: '10px',
 };
 
 const buttonEditStyle = {
   width: '100px',
+  height: '55px',
   margin: '5px',
 };
 
@@ -126,28 +130,39 @@ const UserQuizzes = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className="table-title-header">Title</TableCell>
-              <TableCell className="table-description-header">Description</TableCell>
-              <TableCell className="table-actions-header">Actions</TableCell>
+              <TableCell align="center" className="table-image-header">Image</TableCell>
+              <TableCell align="center" className="table-title-header">Title</TableCell>
+              <TableCell align="center" className="table-description-header">Description</TableCell>
+              <TableCell align="center" className="table-actions-multiplayer-header">Multiplayer</TableCell>
+              <TableCell align="center" className="table-actions-header">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {quizzes.map((quiz) => (
               <TableRow key={quiz.id}>
-                <TableCell className="table-title">{quiz.title}</TableCell>
-                <TableCell className="table-description">{quiz.description}</TableCell>
-                <TableCell className="table-actions">
+                <TableCell align="center" className="table-image">
+                  <Avatar
+                    variant="rounded"
+                    src={quiz.quizPicture || quizBG}
+                    sx={{ width: 90, height: 90, borderRadius: '8px', marginLeft: '16px' }}
+                  />
+                </TableCell>
+                <TableCell align="center" className="table-title">{quiz.title}</TableCell>
+                <TableCell align="center" className="table-description">{quiz.description}</TableCell>
+                <TableCell align="center" className="table-actions-multiplayer-header">
+                  {quiz.isMultiplayer && (
+                    <Button onClick={() => startMultiplayer(quiz.id)} variant="contained" style={buttonEditStyle}>
+                      Start Multiplayer
+                    </Button>
+                  )}
+                </TableCell>
+                <TableCell align="center" className="table-actions">
                   <Button component={Link} to={`/editquiz/${quiz.id}`} variant="outlined" style={buttonEditStyle}>
                     Edit
                   </Button>
                   <Button onClick={() => handleDeleteConfirmationOpen(quiz)} variant="outlined" style={buttonEditStyle}>
                     Delete
                   </Button>
-                  {quiz.isMultiplayer && (
-                    <Button onClick={() => startMultiplayer(quiz.id)} variant="contained" style={buttonEditStyle}>
-                      Start Multiplayer
-                    </Button>
-                  )}
                 </TableCell>
               </TableRow>
             ))}

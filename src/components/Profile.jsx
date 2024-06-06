@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Avatar, TextField, Box, Grid, Typography, Snackbar, CircularProgress } from '@mui/material';
+import { 
+  Button, 
+  Avatar, 
+  TextField, 
+  Box, 
+  Typography, 
+  Snackbar, 
+  CircularProgress, 
+  Card, 
+  CardContent 
+} from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
-const authUserId = localStorage.getItem('authUserId');
 import apiService from '../services/apiService';
 
 const Profile = () => {
@@ -94,6 +103,7 @@ const Profile = () => {
       reader.readAsDataURL(file);
     });
   };
+
   const handleUsernameChange = (e) => {
     setUser({ ...user, username: e.target.value });
   };
@@ -125,83 +135,93 @@ const Profile = () => {
   return (
     <div>
       <Navbar />
-      <h2>Profile</h2>
-      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
-        <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
-          {successMessage}
-        </MuiAlert>
-      </Snackbar>
-      <Grid container spacing={2} alignItems="center" justifyContent="center">
-        <Grid item>
-          <Avatar alt="User Avatar" src={user.profilePicture || 'url/to/default/image.jpg'} sx={{ width: 120, height: 120 }} />
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} alignItems="center" justifyContent="center">
-        <Grid item>
-          {editMode ? (
-            <label htmlFor="profile-picture-input">
-              <Button component="span" variant="outlined" sx={{ marginTop: 2 }}>
-                Upload Image
+      <Box display="flex" justifyContent="center" mt={4}>
+        <Card 
+          sx={{ 
+            maxWidth: 600, 
+            width: '100%', 
+            boxShadow: '0 4px 8px rgba(97, 0, 193, 0.5), 0 6px 20px rgba(97, 0, 193, 0.3)', 
+            border: '1px solid #6100C1',
+            borderRadius: '16px'
+          }}
+        >
+          <CardContent>
+            <Typography variant="h4" align="center" gutterBottom>
+              Profile
+            </Typography>
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
+              <MuiAlert onClose={handleSnackbarClose} severity="success" sx={{ width: '100%' }}>
+                {successMessage}
+              </MuiAlert>
+            </Snackbar>
+            <Box display="flex" justifyContent="center" mb={2}>
+              <Avatar alt="User Avatar" src={user.profilePicture || 'url/to/default/image.jpg'} sx={{ width: 120, height: 120 }} />
+            </Box>
+            <Box display="flex" justifyContent="center" mb={2}>
+              {editMode ? (
+                <label htmlFor="profile-picture-input">
+                  <Button component="span" variant="outlined">
+                    Upload Image
+                  </Button>
+                </label>
+              ) : (
+                <Button variant="outlined" onClick={handleEditModeToggle}>
+                  Edit
+                </Button>
+              )}
+              <input
+                id="profile-picture-input"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+              />
+            </Box>
+            <Box mb={2}>
+              <Typography variant="subtitle1">Username:</Typography>
+              {editMode ? (
+                <TextField
+                  label="Username"
+                  value={user.username}
+                  onChange={handleUsernameChange}
+                  variant="outlined"
+                  fullWidth
+                />
+              ) : (
+                <Typography variant="body1">{user.username}</Typography>
+              )}
+            </Box>
+            <Box mb={2}>
+              <Typography variant="subtitle1">Full Name:</Typography>
+              {editMode ? (
+                <TextField
+                  label="Full Name"
+                  value={user.fullName}
+                  onChange={handleFullNameChange}
+                  variant="outlined"
+                  fullWidth
+                />
+              ) : (
+                <Typography variant="body1">{user.fullName}</Typography>
+              )}
+            </Box>
+            {editMode ? (
+              <Box display="flex" justifyContent="center" mb={2}>
+                <Button variant="contained" onClick={handleUpdateProfile}>
+                  Save Changes
+                </Button>
+                <Button variant="outlined" onClick={handleCancel} sx={{ marginLeft: 2 }}>
+                  Cancel
+                </Button>
+              </Box>
+            ) : null}
+            <Box display="flex" justifyContent="center" mt={2}>
+              <Button variant="contained" component={Link} to="/userquizzes">
+                View My Quizzes
               </Button>
-            </label>
-          ) : (
-            <Button variant="outlined" onClick={handleEditModeToggle} sx={{ marginTop: 2 }}>
-              Edit
-            </Button>
-          )}
-          <input
-            id="profile-picture-input"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ display: 'none' }}
-          />
-        </Grid>
-      </Grid>
-      <Box mt={2}>
-        <Typography variant="subtitle1">Username:</Typography>
-        {editMode ? (
-          <TextField
-            label="Username"
-            value={user.username}
-            onChange={handleUsernameChange}
-            variant="outlined"
-            fullWidth
-          />
-        ) : (
-          <Typography variant="body1">{user.username}</Typography>
-        )}
-      </Box>
-      <Box mt={2}>
-        <Typography variant="subtitle1">Full Name:</Typography>
-        {editMode ? (
-          <TextField
-            label="Full Name"
-            value={user.fullName}
-            onChange={handleFullNameChange}
-            variant="outlined"
-            fullWidth
-          />
-        ) : (
-          <Typography variant="body1">{user.fullName}</Typography>
-        )}
-      </Box>
-      <Box mt={2}>
-        {editMode ? (
-          <div>
-            <Button variant="contained" onClick={handleUpdateProfile}>
-              Save Changes
-            </Button>
-            <Button variant="outlined" onClick={handleCancel} sx={{ marginLeft: 2 }}>
-              Cancel
-            </Button>
-          </div>
-        ) : null}
-      </Box>
-      <Box mt={2}>
-        <Button variant="contained" component={Link} to="/userquizzes">
-          View My Quizzes
-        </Button>
+            </Box>
+          </CardContent>
+        </Card>
       </Box>
     </div>
   );
