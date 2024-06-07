@@ -160,7 +160,7 @@ const UserQuizzes = () => {
                   <Button component={Link} to={`/editquiz/${quiz.id}`} variant="outlined" style={buttonEditStyle}>
                     Edit
                   </Button>
-                  <Button onClick={() => handleDeleteConfirmationOpen(quiz)} variant="outlined" style={buttonEditStyle}>
+                  <Button onClick={() => handleDeleteConfirmationOpen(quiz)} variant="outlined" style={buttonEditStyle} >
                     Delete
                   </Button>
                 </TableCell>

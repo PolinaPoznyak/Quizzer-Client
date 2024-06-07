@@ -14,6 +14,17 @@ import {
 } from '@mui/material';
 import apiService from '../services/apiService';
 
+const imageStyle = {
+  display: 'block',
+  marginTop: '10px',
+  marginBottom: '45px',
+  maxWidth: '300px',
+  borderRadius: '10px',
+  boxShadow: '0 4px 8px #6100C1',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+};
+
 const PlayQuiz = () => {
   const { id } = useParams();
   const [quiz, setQuiz] = useState(null);
@@ -171,6 +182,13 @@ const PlayQuiz = () => {
           </div>
         ) : (
           <div>
+            {currentQuestion.questionPicture && (
+              <img
+                src={currentQuestion.questionPicture}
+                alt="Question"
+                style={imageStyle}
+              />
+            )}
             <Typography variant="h6">{currentQuestion.text}</Typography>
             <RadioGroup
               aria-label="answers"

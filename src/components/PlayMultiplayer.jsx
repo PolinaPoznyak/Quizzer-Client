@@ -16,6 +16,17 @@ import {
 import { styled } from '@mui/system';
 import apiService from '../services/apiService';
 
+const imageStyle = {
+  display: 'block',
+  marginTop: '10px',
+  marginBottom: '45px',
+  maxWidth: '300px',
+  borderRadius: '10px',
+  boxShadow: '0 4px 8px #6100C1',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+};
+
 const PlayMultiplayer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -247,6 +258,13 @@ const PlayMultiplayer = () => {
             variant="determinate"
             value={(timeLeftProgressBar / 15) * 100}
             style={{ backgroundColor: getProgressColor() }}/>
+            )}
+            {currentQuestion.questionPicture && (
+              <img
+                src={currentQuestion.questionPicture}
+                alt="Question"
+                style={imageStyle}
+              />
             )}
           <Typography variant="h6">{currentQuestion.text}</Typography>
           <RadioGroup

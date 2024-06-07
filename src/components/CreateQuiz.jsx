@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
-
 import {
   Button,
   TextField,
@@ -33,16 +32,37 @@ const inputLabelSelectStyle = {
   width: '100px',
 };
 
+const uploadButtonStyle = {
+  width: '250px',
+  margin: '25px',
+  display: 'inline-block',
+  foreground: '#6100C1',
+};
+
+const hiddenInputStyle = {
+  display: 'none',
+};
+
+const imageStyle = {
+  display: 'block',
+  marginTop: '10px',
+  maxWidth: '300px',
+  borderRadius: '10px',
+  boxShadow: '0 4px 8px #272727',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+};
+
 const CreateQuiz = () => {
   const [quizDetails, setQuizDetails] = useState({
     title: '',
     description: '',
+    quizPicture: '',
     isMultiplayer: false,
   });
 
   const [questions, setQuestions] = useState([]);
   const [createdQuiz, setCreatedQuiz] = useState(null);
-  const [answers, setAnswers] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -66,6 +86,7 @@ const CreateQuiz = () => {
       {
         text: '',
         questionType: '',
+        questionPicture: '',
         answers: [],
       },
     ]);
@@ -131,6 +152,7 @@ const CreateQuiz = () => {
         createdQuizResponse = await apiService.createQuiz({
           title: quizDetails.title,
           description: quizDetails.description,
+          quizPicture: quizDetails.quizPicture,
           isMultiplayer: quizDetails.isMultiplayer,
         });
 
@@ -148,6 +170,7 @@ const CreateQuiz = () => {
           const createdQuestionResponse = await apiService.createQuestion({
             text: question.text,
             questionType: question.questionType,
+            questionPicture: question.questionPicture,
             quizId: createdQuizResponse.id,
           });
 
@@ -177,6 +200,26 @@ const CreateQuiz = () => {
       }, 2000);
     } catch (error) {
       console.error('Error during quiz creation:', error);
+    }
+  };
+
+  const handleFileChange = (event, questionIndex = null) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (questionIndex === null) {
+          setQuizDetails({
+            ...quizDetails,
+            quizPicture: e.target.result,
+          });
+        } else {
+          const updatedQuestions = [...questions];
+          updatedQuestions[questionIndex].questionPicture = e.target.result;
+          setQuestions(updatedQuestions);
+        }
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -227,12 +270,52 @@ const CreateQuiz = () => {
         }
         label="Is Multiplayer"
       />
+      {quizDetails.quizPicture && (
+        <img
+          src={quizDetails.quizPicture}
+          alt="Quiz"
+          style={imageStyle}
+        />
+      )}
+      <input
+        accept="image/*"
+        style={hiddenInputStyle}
+        id="upload-photo"
+        type="file"
+        onChange={(e) => handleFileChange(e)}
+      />
+      <label htmlFor="upload-photo">
+        <Button variant="contained" component="span" style={uploadButtonStyle} >
+          Upload Quiz Picture
+        </Button>
+      </label>
+      <br />
       <hr style={{ margin: '20px 0' }} />
       <h3>2. Add questions and answers on them</h3>
 
       {/* Display questions and answers */}
       {questions.map((question, questionIndex) => (
         <div key={questionIndex}>
+          {question.questionPicture && (
+            <img
+              src={question.questionPicture}
+              alt="Question"
+              style={imageStyle}
+            />
+          )}
+          <input
+            accept="image/*"
+            style={hiddenInputStyle}
+            id={`upload-question-photo-${questionIndex}`}
+            type="file"
+            onChange={(e) => handleFileChange(e, questionIndex)}
+          />
+          <label htmlFor={`upload-question-photo-${questionIndex}`}>
+            <Button variant="contained" component="span" style={uploadButtonStyle}>
+              Upload Question Picture
+            </Button>
+          </label>
+          <br></br>
           <TextField
             name="text"
             label="Question Text"
@@ -241,7 +324,9 @@ const CreateQuiz = () => {
             style={textFieldStyle}
             margin="normal"
           />
-          <FormControl margin="normal">
+          <FormControl 
+          style={{ marginLeft: '19px' }}
+          margin="normal">
             <InputLabel id={`question-type-label-${questionIndex}`}>
               Question Type
             </InputLabel>
@@ -263,8 +348,8 @@ const CreateQuiz = () => {
             onClick={() => handleDeleteQuestion(questionIndex)}
             variant="outlined"
             style={{ width: '50px', height: '50px', margin: '19px' }}
-              >
-                ✖
+          >
+            ✖
           </Button>
           <br />
           <h3>Answers:</h3>
@@ -281,7 +366,9 @@ const CreateQuiz = () => {
                 style={textFieldStyle}
                 margin="normal"
               />
-              <FormControl margin="normal">
+              <FormControl 
+              style={{ marginLeft: '19px' }}
+              margin="normal">
                 <InputLabel
                   id={`is-correct-label-${questionIndex}-${answerIndex}`}
                 >

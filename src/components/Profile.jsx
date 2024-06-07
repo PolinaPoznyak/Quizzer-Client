@@ -141,7 +141,7 @@ const Profile = () => {
             maxWidth: 600, 
             width: '100%', 
             boxShadow: '0 4px 8px rgba(97, 0, 193, 0.5), 0 6px 20px rgba(97, 0, 193, 0.3)', 
-            border: '1px solid #6100C1',
+            border: '1px solid #272727',
             borderRadius: '16px'
           }}
         >
