@@ -6,11 +6,6 @@ import { Card, CardContent, Typography, Avatar, Grid, Button } from '@mui/materi
 import { styled } from '@mui/system';
 import apiService from '../services/apiService';
 
-interface ConnectToQuizRequest {
-  userId: string;
-  connectionCode: number;
-}
-
 interface Participant {
   id: string;
   username: string;
@@ -20,6 +15,7 @@ interface Participant {
 const QuizLobby = () => {
   const [quizSessionInfo, setQuizSessionInfo] = useState<any>({});
   const [quizId, setQuizId] = useState<string | null>(null);
+  const [numberOfQuestions, setNumberOfQuestions] = useState<number>(0);
   const [searchParams] = useSearchParams();
   const quizSessionId = searchParams.get('quizSessionId');
   const quizCode = searchParams.get('quizCode');
@@ -29,6 +25,8 @@ const QuizLobby = () => {
   const [connection, setConnection] = useState<HubConnection>();
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [isQuizStarted, setIsQuizStarted] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(25);
 
   const navigate = useNavigate();
 
@@ -63,19 +61,34 @@ const QuizLobby = () => {
           navigate(`/multiplayer/${quizId}`);
         } else {
           setIsQuizStarted(true);
+          setCurrentQuestionIndex(1);
         }
       });
     }
   }, [connection, quizId, navigate, quizOwner]);
 
-  const isHost = participants.some(participant => participant.id === userId && quizOwner);
+  useEffect(() => {
+    if (isQuizStarted) {
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev === 1) {
+            if (currentQuestionIndex === numberOfQuestions) {
+              clearInterval(timer);
+              navigate(`/multiplayer-results/${quizSessionId}`);
+              return 0;
+            } else {
+              setCurrentQuestionIndex(prevIndex => prevIndex + 1);
+              return 25;
+            }
+          } else {
+            return prev - 1;
+          }
+        });
+      }, 1000);
 
-  const handleStartQuiz = () => {
-    if (connection) {
-      connection.invoke("StartQuizSession", quizSessionId);
-      setIsQuizStarted(true);
+      return () => clearInterval(timer);
     }
-  };
+  }, [isQuizStarted, currentQuestionIndex, numberOfQuestions, navigate, quizSessionId]);
 
   const fetchQuizSessionInfo = async () => {
     try {
@@ -83,8 +96,19 @@ const QuizLobby = () => {
       setQuizSessionInfo(data);
       localStorage.setItem('quizSessionId', data.id);
       setQuizId(data.quizId);
+      const numQuestions = await apiService.getNumberOfQuestionsByQuizId(data.quizId);
+      setNumberOfQuestions(numQuestions);
     } catch (error) {
       console.error("Failed to fetch quiz session info:", error);
+    }
+  };
+
+  const isHost = participants.some(participant => participant.id === userId && quizOwner);
+
+  const handleStartQuiz = () => {
+    if (connection) {
+      connection.invoke("StartQuizSession", quizSessionId);
+      setIsQuizStarted(true);
     }
   };
 
@@ -130,6 +154,14 @@ const QuizLobby = () => {
         <StyledButton variant="contained" onClick={handleStartQuiz}>
           Start
         </StyledButton>
+      )}
+      {isHost && isQuizStarted && (
+        <StyledCard style={{ marginTop: '15px' }}>
+          <CardContent>
+            <Typography variant="h6">Users play question #{currentQuestionIndex}. Wait until they finish it💪</Typography>
+            <Typography variant="h4">{`00:${timeLeft < 10 ? `0${timeLeft}` : timeLeft}`}</Typography>
+          </CardContent>
+        </StyledCard>
       )}
     </div>
   );

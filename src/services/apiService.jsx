@@ -23,6 +23,16 @@ const apiService = {
       throw error;
     }
   },
+  
+  getNumberOfQuestionsByQuizId: async (quizId) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/quiz/numberOfQuestions/${quizId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching quiz:', error);
+      throw error;
+    }
+  },
 
   updateQuiz: async (quizId, updatedQuizData) => {
     try {

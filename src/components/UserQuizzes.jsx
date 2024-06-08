@@ -22,6 +22,15 @@ import MuiAlert from '@mui/material/Alert';
 import apiService from '../services/apiService';
 import '../css/UserQuizzes.css';
 import quizBG from '../assets/quizBG.jpg';
+import { styled } from '@mui/system';
+
+const StyledButton = styled(Button)({
+  backgroundColor: '#6C63FF',
+  color: '#ffffff',
+  '&:hover': {
+    backgroundColor: '#9e7bfa',
+  },
+});
 
 const buttonStyle = {
   width: '150px',
@@ -151,9 +160,9 @@ const UserQuizzes = () => {
                 <TableCell align="center" className="table-description">{quiz.description}</TableCell>
                 <TableCell align="center" className="table-actions-multiplayer-header">
                   {quiz.isMultiplayer && (
-                    <Button onClick={() => startMultiplayer(quiz.id)} variant="contained" style={buttonEditStyle}>
+                    <StyledButton onClick={() => startMultiplayer(quiz.id)} variant="contained" style={buttonEditStyle}>
                       Start Multiplayer
-                    </Button>
+                    </StyledButton>
                   )}
                 </TableCell>
                 <TableCell align="center" className="table-actions">

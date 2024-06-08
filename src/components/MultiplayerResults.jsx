@@ -61,8 +61,9 @@ const MultiplayerResults = () => {
   const StyledButton = styled(Button)({
     marginTop: '20px',
     backgroundColor: '#6C63FF',
+    color: '#ffffff',
     '&:hover': {
-      backgroundColor: '#574bdb',
+      backgroundColor: '#9e7bfa',
     },
   });
 

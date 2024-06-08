@@ -14,6 +14,16 @@ import MuiAlert from '@mui/material/Alert';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import apiService from '../services/apiService';
+import { styled } from '@mui/system';
+
+const StyledButton = styled(Button)({
+  marginTop: '20px',
+  backgroundColor: '#6C63FF',
+  color: '#ffffff',
+  '&:hover': {
+    backgroundColor: '#9e7bfa',
+  },
+});
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -140,7 +150,7 @@ const Profile = () => {
           sx={{ 
             maxWidth: 600, 
             width: '100%', 
-            boxShadow: '0 4px 8px rgba(97, 0, 193, 0.5), 0 6px 20px rgba(97, 0, 193, 0.3)', 
+            boxShadow: '0 4px 8px rgba(108, 99, 255, 0.5), 0 6px 20px rgba(108, 99, 255, 0.3)', 
             border: '1px solid #272727',
             borderRadius: '16px'
           }}
@@ -160,13 +170,13 @@ const Profile = () => {
             <Box display="flex" justifyContent="center" mb={2}>
               {editMode ? (
                 <label htmlFor="profile-picture-input">
-                  <Button component="span" variant="outlined">
+                  <Button component="span" style={{ color: '#ffffff', width: '150px' }} variant="outlined">
                     Upload Image
                   </Button>
                 </label>
               ) : (
-                <Button variant="outlined" onClick={handleEditModeToggle}>
-                  Edit
+                <Button variant="outlined" style={{ color: '#ffffff', width: '150px' }} onClick={handleEditModeToggle}>
+                  Edit Info
                 </Button>
               )}
               <input
@@ -207,18 +217,18 @@ const Profile = () => {
             </Box>
             {editMode ? (
               <Box display="flex" justifyContent="center" mb={2}>
-                <Button variant="contained" onClick={handleUpdateProfile}>
+                <Button variant="contained" style={{ backgroundColor: '#6C63FF', color: '#ffffff' }} onClick={handleUpdateProfile}>
                   Save Changes
                 </Button>
-                <Button variant="outlined" onClick={handleCancel} sx={{ marginLeft: 2 }}>
+                <Button variant="outlined" style={{ color: '#ffffff' }} onClick={handleCancel} sx={{ marginLeft: 2 }}>
                   Cancel
                 </Button>
               </Box>
             ) : null}
             <Box display="flex" justifyContent="center" mt={2}>
-              <Button variant="contained" component={Link} to="/userquizzes">
+              <StyledButton variant="contained" component={Link} to="/userquizzes">
                 View My Quizzes
-              </Button>
+              </StyledButton>
             </Box>
           </CardContent>
         </Card>
